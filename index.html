@@ -1,49 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Bus Seats </title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-  }
-  .row {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 10px;
-  }
-  .seat {
-    width: 40px;
-    height: 40px;
-    background-color: #ccc;
-    margin: 5px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  .seat.booked {
-    background-color: red;
-    cursor: not-allowed;
-  }
-  .seat.selected {
-    background-color: green;
-  }
-  .gap {
-    width: 50px; /* aisle space */
-  }
-</style>
-</head>
-<body>
-
-<h2>Bus Seating Plan</h2>
-<div id="seating"></div>
-<p>Selected Seats: <span id="selectedSeats">None</span></p>
-
 <script>
   const totalRows = 9; // 45 seats / 5 seats per row
   const seatsPerRow = { left: 2, right: 3 };
   const seatingDiv = document.getElementById("seating");
   let selected = [];
 
+  // Generate first 9 rows (2 seats left + aisle + 3 seats right)
   for (let r = 1; r <= totalRows; r++) {
     let rowDiv = document.createElement("div");
     rowDiv.className = "row";
@@ -68,6 +29,15 @@
     seatingDiv.appendChild(rowDiv);
   }
 
+  // Add last row with 6 seats (no aisle)
+  let lastRowDiv = document.createElement("div");
+  lastRowDiv.className = "row";
+  for (let s = 1; s <= 6; s++) {
+    let seat = createSeat(`R${totalRows + 1}S${s}`);
+    lastRowDiv.appendChild(seat);
+  }
+  seatingDiv.appendChild(lastRowDiv);
+
   function createSeat(id) {
     let seat = document.createElement("div");
     seat.className = "seat";
@@ -85,9 +55,8 @@
       seatElement.classList.add("selected");
       selected.push(id);
     }
-    document.getElementById("selectedSeats").innerText = selected.length > 0 ? selected.join(", ") : "None";
+    document.getElementById("selectedSeats").innerText =
+      selected.length > 0 ? selected.join(", ") : "None";
   }
 </script>
 
-</body>
-</html>
