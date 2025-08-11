@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Cinema Hall Booking</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+  .row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .seat {
+    width: 40px;
+    height: 40px;
+    background-color: #ccc;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .seat.booked {
+    background-color: red;
+    cursor: not-allowed;
+  }
+  .seat.selected {
+    background-color: green;
+  }
+  .gap {
+    width: 50px; /* aisle space */
+  }
+</style>
+</head>
+<body>
+
+<h2>Cinema Hall Seating Plan</h2>
+<div id="seating"></div>
+<p>Selected Seats: <span id="selectedSeats">None</span></p>
+
+<script>
+  const totalRows = 9; // 45 seats / 5 seats per row
+  const seatsPerRow = { left: 2, right: 3 };
+  const seatingDiv = document.getElementById("seating");
+  let selected = [];
+
+  for (let r = 1; r <= totalRows; r++) {
+    let rowDiv = document.createElement("div");
+    rowDiv.className = "row";
+
+    // Left side seats
+    for (let s = 1; s <= seatsPerRow.left; s++) {
+      let seat = createSeat(`R${r}L${s}`);
+      rowDiv.appendChild(seat);
+    }
+
+    // Gap (aisle)
+    let gap = document.createElement("div");
+    gap.className = "gap";
+    rowDiv.appendChild(gap);
+
+    // Right side seats
+    for (let s = 1; s <= seatsPerRow.right; s++) {
+      let seat = createSeat(`R${r}R${s}`);
+      rowDiv.appendChild(seat);
+    }
+
+    seatingDiv.appendChild(rowDiv);
+  }
+
+  function createSeat(id) {
+    let seat = document.createElement("div");
+    seat.className = "seat";
+    seat.innerText = id;
+    seat.onclick = () => toggleSeat(id, seat);
+    return seat;
+  }
+
+  function toggleSeat(id, seatElement) {
+    if (seatElement.classList.contains("booked")) return;
+    if (seatElement.classList.contains("selected")) {
+      seatElement.classList.remove("selected");
+      selected = selected.filter(s => s !== id);
+    } else {
+      seatElement.classList.add("selected");
+      selected.push(id);
+    }
+    document.getElementById("selectedSeats").innerText = selected.length > 0 ? selected.join(", ") : "None";
+  }
+</script>
+
+</body>
+</html>
